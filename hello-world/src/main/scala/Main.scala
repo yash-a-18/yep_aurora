@@ -1,5 +1,8 @@
 import questions.sumOfSquares
 
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
 def msg = "I was compiled by Scala 3. :)"
 
 def msg2 = "Hello There!"
@@ -26,6 +29,16 @@ def hello(): Unit =
 
   val theSumOfSquares = sumOfSquares(numbers)
   println(s"The sum of squares is $theSumOfSquares")
+
+  println(s"${toInt("foo")}")
+
+  toInt("12") match {
+    case Some(i) => println(i)
+    case None => println(null)
+  }
+  val x :Future[Int] = Future(aShortRunningTask())
+    println("Here")
+    println(x)
 
 def listMethod(): Boolean = 
     val a = List(10, 20, 30, 40, 10)      // List(10, 20, 30, 40, 10)
@@ -79,3 +92,16 @@ def add(x: Int, y: Int): Int =
     val theSum = x + y
     println(s"received $x and $y, their sum is $theSum")
     theSum
+
+def toInt(s : String): Option[Int] ={
+    try{
+        Some(Integer.parseInt(s.trim))
+    }
+    catch{
+        case e: Exception => None
+    }
+}
+
+def aShortRunningTask() =
+  Thread.sleep(2000)
+  42
