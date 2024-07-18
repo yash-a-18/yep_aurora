@@ -11,35 +11,58 @@ def hello(): Unit =
   println("Hello world!")
   println(msg)
 
-@main def learningNew(): Unit =
+def learningNew(): Unit =
   hello()
   println(msg2)
-  val last_val = listMethod()
-  println(last_val)
-  val numbers = List.range(1, 10)
-  val greaterNumbers = lambdaFunc(numbers)
-  println(greaterNumbers)
-  multiCollectionMethods()
-  println(sum(numbers))
+//   val last_val = listMethod()
+//   println(last_val)
+//   val numbers = List.range(1, 10)
+//   val greaterNumbers = lambdaFunc(numbers)
+//   println(greaterNumbers)
+//   multiCollectionMethods()
+//   println(sum(numbers))
 
-  //using reduce
-  numbers.reduce(add)
-  val mulGN = greaterNumbers.reduce(_ * _)
-  println(s"Multiplication of all greater numbers using reduce is $mulGN")
+//   //using reduce
+//   numbers.reduce(add)
+//   val mulGN = greaterNumbers.reduce(_ * _)
+//   println(s"Multiplication of all greater numbers using reduce is $mulGN")
 
-  val theSumOfSquares = sumOfSquares(numbers)
-  println(s"The sum of squares is $theSumOfSquares")
+//   val theSumOfSquares = sumOfSquares(numbers)
+//   println(s"The sum of squares is $theSumOfSquares")
 
-  println(s"${toInt("foo")}")
+//   println(s"${toInt("foo")}")
 
-  toInt("12") match {
-    case Some(i) => println(i)
-    case None => println(null)
+//   toInt("12") match {
+//     case Some(i) => println(i)
+//     case None => println(null)
+//   }
+//   val x :Future[Int] = Future(aShortRunningTask())
+//     println("Here")
+//     println(x)
+//   val m_map = Map(1->"One", 2->"Two")
+//   println(m_map(1))
+    val stack = new Stack[Int]()
+    val stack1 = stack.push(1)
+    println(s"${stack1.peek()}")
+
+
+case class Stack[A] (private val elements: List[A]) {
+  
+  // Auxiliary constructor with default empty stack
+  def this() = this(Nil)
+    def push(x: A): Stack[A] ={
+        new Stack(x :: elements)
+    }
+    def peek(): Option[A] = {
+        elements.headOption
+    }
+    def pop(): (Option[A], Stack[A]) = {
+    elements match {
+      case Nil => (None, this) // Stack is empty
+      case _ => (peek(), new Stack(elements.tail))
+    }
   }
-  val x :Future[Int] = Future(aShortRunningTask())
-    println("Here")
-    println(x)
-
+}
 def listMethod(): Boolean = 
     val a = List(10, 20, 30, 40, 10)      // List(10, 20, 30, 40, 10)
     // println(a.distinct)                            // List(10, 20, 30, 40)
