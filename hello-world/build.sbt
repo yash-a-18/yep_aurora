@@ -12,5 +12,7 @@ lazy val root = project
     scalaVersion := scala3Version,
     jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.8.0",
+    // Depend on Laminar
+    libraryDependencies += "com.raquo" %%% "laminar" % "17.0.0",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % Test
   )
