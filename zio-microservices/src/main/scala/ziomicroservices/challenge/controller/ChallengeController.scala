@@ -12,16 +12,17 @@ import zio.json._
 import ziomicroservices.challenge.model.Challenge
 import ziomicroservices.challenge.service.ChallengeService
 
-
 object ChallengeController{
-  val config: CorsConfig =
-    CorsConfig(
-      allowedOrigin = {
-        case origin@Origin.Value(_, host, _) => Some(AccessControlAllowOrigin.All)
-        case _ => Some(AccessControlAllowOrigin.All)
-      },
-      allowedMethods = AccessControlAllowMethods(Method.PUT, Method.DELETE, Method.GET, Method.POST),
-    )
+  // val config: CorsConfig =
+  // CorsConfig(
+  //   allowedOrigin = {  //allows origin from vite server to access routes on server
+  //     case origin if origin == Origin.parse("http://localhost:8080").toOption.get =>
+  //       Some(AccessControlAllowOrigin.Specific(origin))
+  //     case _  => None
+  //   },
+  // )
+  
+
   def apply(): Http[ChallengeService, Throwable, Request, Response] =
     Http.collectZIO[Request] {
       case Method.GET -> Root / "challenges" / "random" => {
@@ -30,16 +31,21 @@ object ChallengeController{
       case Method.GET -> Root / "challenges" / "mul" => {
         ChallengeService.createRandomMultiplication().map(response => Response.json(response.toJson))
       } //@@ cors(config)
+      case req @ Method.POST -> Root / "test" => {
+        req.body.asString(Charsets.Utf8).map(Response.text(_))
+      }
       case req @ Method.POST -> Root / "challenges" / "check" =>
         req.body.asString
           .flatMap { requestBody =>
-            ZIO.fromEither(requestBody.fromJson[Challenge].left.map(new Exception(_)))
+            // ZIO.fromEither(requestBody.fromJson[Challenge].left.map(new Exception(_)))
+            ZIO.from(requestBody.fromJson[Challenge].left.map(new Exception(_)))//Convert?validating the JSON to Challenge type
           }
           .flatMap { challengeData =>
             ChallengeService.checkChallenge(challengeData)
           }
           .map { result =>
             Response.json(result.toJson)
+            //  .addHeader("ContentSecurityPolicy", "default-src 'self'; connect-src 'self' http://localhost:5000;")
           }
-    }@@ cors(config)
+    }//@@ cors(config)
 }
