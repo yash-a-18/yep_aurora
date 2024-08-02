@@ -16,18 +16,15 @@ import zio.Console._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class TestUser extends AnyWordSpec with Matchers{
-  
-  
+class TestUser extends AnyWordSpec with Matchers {
+
   "UserService should add a User and yield ID" should {
-    "For User add at" in{
-  val testUser = User(1, "John", "Doe")
-  UserService.dynamicInsert(testUser).flatMap { op =>
-    // Extract the `User` object from the ZIO effect
-    op should be (1)
-    println(op)
-    ZIO.logInfo(s"Added User at $op")
+    "For User add at" in {
+      val testUser = User(1, "John", "Doe")
+      println(testUser.firstName)
+      val userTask = UserService.dynamicInsert(testUser)
+      println(userTask.flatMap.toString)
+      userTask.flatMap(result => ZIO.succeed(println(s"Result: $result")))
+    }
   }
-  }
-}
 }

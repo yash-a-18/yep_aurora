@@ -4,19 +4,16 @@ val zioVersion = "2.0.15"
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "zio-microservices",
+    name := "user-server",
     version := "0.1.0-SNAPSHOT",
     scalaVersion := scala3Version,
     libraryDependencies += "dev.zio" %% "zio" % zioVersion,
     libraryDependencies += "dev.zio" %% "zio-json" % "0.6.0",
     libraryDependencies += "dev.zio" %% "zio-http" % "3.0.0-RC2",
-    // https://mvnrepository.com/artifact/io.getquill/quill-jdbc
-    // libraryDependencies += "io.getquill" %% "quill-jdbc" % "4.8.5",
     // https://mvnrepository.com/artifact/io.getquill/quill-jdbc-zio
     libraryDependencies += "io.getquill" %% "quill-jdbc-zio" % "4.8.5",
     // https://mvnrepository.com/artifact/io.getquill/quill-jdbc
     libraryDependencies += "io.getquill" %% "quill-jdbc" % "4.8.5",
-    libraryDependencies += "org.postgresql" % "postgresql" % "42.6.0", // Check for the latest version
     // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
     libraryDependencies += "com.mysql" % "mysql-connector-j" % "9.0.0", // It was at mysql-connector-java but is now moved to mysql-connector-j
     libraryDependencies += "org.scalameta" %% "munit" % "1.0.0" % Test,

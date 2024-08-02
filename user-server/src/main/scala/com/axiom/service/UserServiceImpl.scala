@@ -1,15 +1,15 @@
-package ziomicroservices.challenge.service
+package com.axiom.service
 
 import zio._
-import ziomicroservices.challenge.model.User
 import io.getquill._
+import com.axiom.model.User
 import io.getquill.SnakeCase
-import ziomicroservices.challenge.repository.UserRepository
+import com.axiom.repository.UserRepository
 
 case class UserServiceImpl(caRepo: UserRepository) extends UserService {
-  def dynamicInsert(user: User): Task[User] = {
+  def dynamicInsert(user: User): Task[Unit] = {
     println(user)
-    caRepo.save(user).map(_ => user)
+    caRepo.save(user)//.map(_ => user)
   }
 
   def getUsers(): Task[List[User]] = {

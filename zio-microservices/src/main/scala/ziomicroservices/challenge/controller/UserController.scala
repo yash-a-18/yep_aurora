@@ -40,6 +40,8 @@ object UserController {
     )
   def apply(): Http[UserService, Throwable, Request, Response] =
     Http.collectZIO[Request] {
+      case req @ (Method.GET -> Root / "user" / "getall") =>
+        UserService.getUsers().map(out => Response.json(out.toJson)).orDie
       case req @ (Method.POST -> Root / "user" / "add") =>
         req.body.asString
           .map(_.fromJson[User])
@@ -47,7 +49,7 @@ object UserController {
             case Left(e) =>
               ZIO
                 .debug(s"Failed to parse the input: $e")
-                .as(Response.text(e).withStatus(Status.BadRequest))
+                .as(Response.text(s"I am sending the error $e").withStatus(Status.BadRequest))
             case Right(u) =>
               UserService
                 .dynamicInsert(u)
