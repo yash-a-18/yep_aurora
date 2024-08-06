@@ -18,28 +18,56 @@ case class MySqlUserRepository(quill: Quill.Mysql[SnakeCase])
     updateMeta[User](_.id)
 
   def fetchAll(): Task[List[User]] = {
-    val fetchQuery = quote {
+    // val fetchQuery = quote {
+    //   query[User]
+    // }
+    // println(fetchQuery)
+    // run(fetchQuery).tapError { error =>
+    //   ZIO.logError(s"Failed to fetch users: ${error.getMessage}")
+    // }
+    run{
       query[User]
     }
-    println(fetchQuery)
-    run(fetchQuery).tapError { error =>
-      ZIO.logError(s"Failed to fetch users: ${error.getMessage}")
-    }
+  }
+    
+  def create(user: User): Task[User] = {
+    run {
+         query[User].insertValue(lift(user)).returning(_.id)
+    }.flatMap(id => getById(id)).map(_=>user)
   }
 
-  def save(user: User): Task[Unit] = {
-    println(s"Rep: $user")
-    println(s"Database: ${quill.ds.getConnection().getCatalog()}")
-    val insertQuery = quote{
-        query[User]
-        .insertValue(lift(user))
-    }
-    println(insertQuery)
-    run(insertQuery).tapError{ error =>
-        ZIO.logError(s"Failed to insert user: ${error.getMessage}")
-        
-    }.unit
+  def update(id: Long, user: User): Task[Option[User]] = {
+    run {
+          query[User].filter(_.id == lift(id)).updateValue(lift(user))
+    }.flatMap(id => getById(id)).map(_.headOption)
   }
+
+  def delete(id: Long): Task[Long] = {
+    run {
+      query[User].filter(_.id == lift(id)).delete
+    }
+  }
+  
+  def getById(id: Long): Task[Option[User]] = {
+    run{
+      query[User].filter(_.id == lift(id))
+    }.map(_.headOption)
+  }
+
+  // def save(user: User): Task[User] = {
+  //   // println(s"Rep: $user")
+  //   // println(s"Database: ${quill.ds.getConnection().getCatalog()}")
+  //   // val insertQuery = quote{
+  //   //     query[User]
+  //   //     .insertValue(lift(user))
+  //   // }
+  //   // println(insertQuery)
+  //   // run(insertQuery).tapError{ error =>
+  //   //     ZIO.logError(s"Failed to insert user: ${error.getMessage}")
+        
+  //   // }.unit
+  //   create(user).map(_=>user)
+  // }
 
 object MySqlUserRepository:
   val layer = ZLayer {

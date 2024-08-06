@@ -13,19 +13,65 @@ object UserController {
     Http.collectZIO[Request] {
       case req @ (Method.GET -> Root / "user" / "getall") =>
         UserService.getUsers().map(out => Response.json(out.toJson)).orDie
+
       case req @ (Method.POST -> Root / "user" / "add") =>
         req.body.asString
           .map(_.fromJson[User])
           .flatMap {
             case Left(e) =>
               ZIO
-                .debug(s"Failed to parse the input: $e")
-                .as(Response.text(s"I am sending the error $e").withStatus(Status.BadRequest))
+                .debug(
+                  s"Failed to parse the input: $e"
+                ) // Prints on the terminal
+                .as(
+                  Response
+                    .text(s"Failed to parse the input: $e")
+                    .withStatus(Status.BadRequest)
+                ) // Sends response to the Server
             case Right(u) =>
               UserService
-                .dynamicInsert(u)
-                .map(out => Response.text("Inserted"))
-                // .map(out => Response.json(out.toJson))
+                .addUser(u)
+                .map(out => Response.json(out.toJson))
+          }
+          .orDie
+
+      case req @ (Method.DELETE -> Root / "user" / "delete" / id) =>
+        UserService
+          .deleteUser(id.toLong)
+          .map {
+            case 0 => Response.text(s"No user found with id $id")
+            case n => Response.text(s"User with id $id is deleted")
+          }
+
+      case req @ (Method.GET -> Root / "user" / "search" / id) =>
+        UserService
+          .searchUser(id.toLong)
+          .map {
+            case None => Response.text(s"No user found with id $id")
+            case out  => Response.json(out.toJson)
+          }
+
+      case req @ (Method.PUT -> Root / "user" / "update" / id) =>
+        req.body.asString
+          .map(_.fromJson[User])
+          .flatMap {
+            case Left(e) =>
+              ZIO
+                .debug(
+                  s"Failed to parse the input: $e"
+                ) // Prints on the terminal
+                .as(
+                  Response
+                    .text(s"Failed to parse the input: $e")
+                    .withStatus(Status.BadRequest)
+                ) // Sends response to the Server
+            case Right(u) =>
+              UserService
+                .updateUser(id.toLong, u)
+                .map {
+                  case None => Response.text(s"No user found to update with id $id")
+                  case out  => Response.json(out.toJson)
+                }
           }
           .orDie
     }

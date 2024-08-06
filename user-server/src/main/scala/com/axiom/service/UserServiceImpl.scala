@@ -7,15 +7,30 @@ import io.getquill.SnakeCase
 import com.axiom.repository.UserRepository
 
 case class UserServiceImpl(caRepo: UserRepository) extends UserService {
-  def dynamicInsert(user: User): Task[Unit] = {
-    println(user)
-    caRepo.save(user)//.map(_ => user)
+  def addUser(user: User): Task[User] = {
+    println("Inserting the User....")
+    caRepo.create(user).map(_ => user)
+  }
+
+  def deleteUser(id: Long): Task[Long] = {
+    println("Deleting User....")
+    caRepo.delete(id)
   }
 
   def getUsers(): Task[List[User]] = {
     println("Getting Users....")
     caRepo.fetchAll()
-  }    
+  }
+
+  def searchUser(id: Long): Task[Option[User]] = {
+    println("Searching User...")
+    caRepo.getById(id)
+  }
+
+  def updateUser(id: Long, user: User): Task[Option[User]] = {
+    println("Updating User...")
+    caRepo.update(id, user)
+  }
 }
 
 object UserServiceImpl {
