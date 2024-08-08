@@ -17,7 +17,7 @@ case class UserServiceImpl(caRepo: UserRepository) extends UserService {
     caRepo.delete(id)
   }
 
-  def getUsers(): Task[List[User]] = {
+  def getUsers(): Task[Option[List[User]]] = {
     println("Getting Users....")
     caRepo.fetchAll()
   }

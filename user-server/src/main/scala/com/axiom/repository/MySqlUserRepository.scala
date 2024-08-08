@@ -17,17 +17,10 @@ case class MySqlUserRepository(quill: Quill.Mysql[SnakeCase])
   inline given upMeta: UpdateMeta[User] =
     updateMeta[User](_.id)
 
-  def fetchAll(): Task[List[User]] = {
-    // val fetchQuery = quote {
-    //   query[User]
-    // }
-    // println(fetchQuery)
-    // run(fetchQuery).tapError { error =>
-    //   ZIO.logError(s"Failed to fetch users: ${error.getMessage}")
-    // }
+  def fetchAll(): Task[Option[List[User]]] = {
     run{
       query[User]
-    }
+    }.map(users => users.headOption.map(_ => users))
   }
     
   def create(user: User): Task[User] = {
@@ -53,21 +46,6 @@ case class MySqlUserRepository(quill: Quill.Mysql[SnakeCase])
       query[User].filter(_.id == lift(id))
     }.map(_.headOption)
   }
-
-  // def save(user: User): Task[User] = {
-  //   // println(s"Rep: $user")
-  //   // println(s"Database: ${quill.ds.getConnection().getCatalog()}")
-  //   // val insertQuery = quote{
-  //   //     query[User]
-  //   //     .insertValue(lift(user))
-  //   // }
-  //   // println(insertQuery)
-  //   // run(insertQuery).tapError{ error =>
-  //   //     ZIO.logError(s"Failed to insert user: ${error.getMessage}")
-        
-  //   // }.unit
-  //   create(user).map(_=>user)
-  // }
 
 object MySqlUserRepository:
   val layer = ZLayer {

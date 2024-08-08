@@ -16,6 +16,12 @@ lazy val root = project
     libraryDependencies += "io.getquill" %% "quill-jdbc" % "4.8.5",
     // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
     libraryDependencies += "com.mysql" % "mysql-connector-j" % "9.0.0", // It was at mysql-connector-java but is now moved to mysql-connector-j
+    // https://mvnrepository.com/artifact/io.circe/circe-core
+    libraryDependencies += "io.circe" %% "circe-core" % "0.15.0-M1",
+    // https://mvnrepository.com/artifact/io.circe/circe-generic
+    libraryDependencies += "io.circe" %% "circe-generic" % "0.15.0-M1",
+    // https://mvnrepository.com/artifact/io.circe/circe-parser
+    libraryDependencies += "io.circe" %% "circe-parser" % "0.15.0-M1",
     libraryDependencies += "org.scalameta" %% "munit" % "1.0.0" % Test,
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % Test,
     // https://mvnrepository.com/artifact/dev.zio/zio-test
