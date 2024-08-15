@@ -17,10 +17,10 @@ case class MySqlUserRepository(quill: Quill.Mysql[SnakeCase])
   inline given upMeta: UpdateMeta[User] =
     updateMeta[User](_.id)
 
-  def fetchAll(): Task[Option[List[User]]] = {
+  def fetchAll(): Task[List[User]] = {
     run{
       query[User]
-    }.map(users => users.headOption.map(_ => users))
+    }.map(users => users)
   }
     
   def create(user: User): Task[User] = {
@@ -45,6 +45,13 @@ case class MySqlUserRepository(quill: Quill.Mysql[SnakeCase])
     run{
       query[User].filter(_.id == lift(id))
     }.map(_.headOption)
+  }
+
+  def sortByFirstName(): Task[List[User]] = {
+    run{
+      query[User].sortBy(u => u.firstName) //if First Name is same then by default it will sort by id in ascending order
+    }
+    
   }
 
 object MySqlUserRepository:
