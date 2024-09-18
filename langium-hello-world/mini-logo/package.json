@@ -1,5 +1,5 @@
 {
-    "name": "hello-world",
+    "name": "mini-logo",
     "description": "Please enter a brief description here",
     "version": "0.0.1",
     "files": [
@@ -55,7 +55,7 @@
         "node": "18.19.1",
         "npm": "10.2.4"
     },
-    "displayName": "hello-world",
+    "displayName": "mini-logo",
     "engines": {
         "vscode": "^1.67.0",
         "node": ">=18.0.0"
@@ -66,28 +66,28 @@
     "contributes": {
         "languages": [
             {
-                "id": "hello-world",
+                "id": "mini-logo",
                 "aliases": [
                     "Hello World",
-                    "hello-world"
+                    "mini-logo"
                 ],
-                "extensions": [".hello"],
+                "extensions": [".logo"],
                 "configuration": "./language-configuration.json"
             }
         ],
         "grammars": [
             {
-                "language": "hello-world",
-                "scopeName": "source.hello-world",
-                "path": "syntaxes/hello-world.tmLanguage.json"
+                "language": "mini-logo",
+                "scopeName": "source.mini-logo",
+                "path": "syntaxes/mini-logo.tmLanguage.json"
             }
         ]
     },
     "activationEvents": [
-        "onLanguage:hello-world"
+        "onLanguage:mini-logo"
     ],
     "main": "./out/extension/main.cjs",
     "bin": {
-        "hello-world-cli": "./bin/cli.js"
+        "mini-logo-cli": "./bin/cli.js"
     }
 }

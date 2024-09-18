@@ -14,7 +14,7 @@ Macro: def=[Def:ID] '(' (args+=Expr (',' args+=Expr)*)? ')';
 Def: 'def' name=ID '(' (params+=Param (',' params+=Param)*)? ')' Block;
 
 //Fragment is the special kind of instance that can be added in the body of the rule
-fragment Block: '{' body+=Stmt '}';
+fragment Block: '{' body+=Stmt* '}';
 
 Param: name=ID;
 

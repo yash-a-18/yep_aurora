@@ -1,0 +1,9 @@
+def main()
+{
+    pen(down)
+    move(10,10)
+    pen(up)
+    color(red)
+}
+
+main()
