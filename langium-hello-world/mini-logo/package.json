@@ -1,5 +1,7 @@
 {
     "name": "mini-logo",
+    "icon": "Aurora.png",
+    "publisher": "Yash A",
     "description": "Please enter a brief description here",
     "version": "0.0.1",
     "files": [
@@ -15,6 +17,7 @@
         "langium:generate": "langium generate",
         "langium:watch": "langium generate --watch",
         "vscode:prepublish": "npm run build && npm run lint",
+        "esbuild-base": "esbuild ./src/extension/main.ts --bundle --outfile=out/extension/main.js --external:vscode --format=cjs --platform=node",
         "build:web": "npm run build",
         "bundle": "vite build",
         "bundle:serve": "http-server ./dist --port 5175",
@@ -33,8 +36,7 @@
         "@codingame/monaco-vscode-keybindings-service-override": "~3.2.3",
         "monaco-editor": "npm:@codingame/monaco-vscode-editor-api@~3.2.3",
         "monaco-editor-wrapper": "~4.0.2",
-        "monaco-languageclient": "~8.1.1",
-        "vscode": "npm:@codingame/monaco-vscode-api@~3.2.3"
+        "monaco-languageclient": "~8.1.1"
     },
     "devDependencies": {
         "@types/node": "^18.0.0",
@@ -49,7 +51,8 @@
         "@codingame/esbuild-import-meta-url-plugin": "~1.0.2",
         "vite": "~5.2.7",
         "http-server": "~14.1.1",
-        "vitest": "~1.4.0"
+        "vitest": "~1.4.0",
+        "vscode": "npm:@codingame/monaco-vscode-api@~3.2.3"
     },
     "volta": {
         "node": "18.19.1",
@@ -68,7 +71,7 @@
             {
                 "id": "mini-logo",
                 "aliases": [
-                    "Hello World",
+                    "Mini-Logo",
                     "mini-logo"
                 ],
                 "extensions": [".logo"],
@@ -81,12 +84,25 @@
                 "scopeName": "source.mini-logo",
                 "path": "syntaxes/mini-logo.tmLanguage.json"
             }
+        ],
+        "semanticTokenTypes": [
+            {
+                "id": "mini-logo",
+                "superType": "type",
+                "description": "A template type."
+            }
+        ],
+        "semanticTokenModifiers": [
+            {
+                "id": "mini-logo",
+                "description": "Annotates a symbol that is implemented natively"
+            }
         ]
     },
     "activationEvents": [
         "onLanguage:mini-logo"
     ],
-    "main": "./out/extension/main.cjs",
+    "main": "./out/extension/main.js",
     "bin": {
         "mini-logo-cli": "./bin/cli.js"
     }

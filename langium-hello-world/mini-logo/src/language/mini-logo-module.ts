@@ -2,6 +2,8 @@ import { type Module, inject } from 'langium';
 import { createDefaultModule, createDefaultSharedModule, type DefaultSharedModuleContext, type LangiumServices, type LangiumSharedServices, type PartialLangiumServices } from 'langium/lsp';
 import { MiniLogoGeneratedModule, MiniLogoGeneratedSharedModule } from './generated/module.js';
 import { MiniLogoValidator as MiniLogoValidator, registerValidationChecks } from './mini-logo-validator.js';
+import * as vscode from 'vscode';
+
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -11,6 +13,38 @@ export type MiniLogoAddedServices = {
         MiniLogoValidator: MiniLogoValidator
     }
 }
+
+export const tokenTypes = [
+    'def', 'for', 'up', 'down', 'color', 'pen', 'move'
+];
+
+const tokenModifiers = ['declaration', 'documentation'];
+const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
+
+const provider: vscode.DocumentSemanticTokensProvider = {
+  provideDocumentSemanticTokens(
+    document: vscode.TextDocument
+  ): vscode.ProviderResult<vscode.SemanticTokens> {
+    // analyze the document and return semantic tokens
+
+    const tokensBuilder = new vscode.SemanticTokensBuilder(legend);
+    // on line 1, characters 1-5 are a class declaration
+    tokensBuilder.push(
+      new vscode.Range(new vscode.Position(1, 1), new vscode.Position(1, 5)),
+      'class',
+      ['declaration']
+    );
+    return tokensBuilder.build();
+  }
+};
+
+const selector = { language: 'java', scheme: 'file' }; // register for all Java documents from the local file system
+
+vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend);
+
+
+
+
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
