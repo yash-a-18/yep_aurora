@@ -46,3 +46,8 @@ Thumbs.db
 .metals/
 .metals/**/*
 .metals/**/.*.metals
+
+# Node specific files
+node_modules/
+**/node_modules/
+package-lock.json
